@@ -1,6 +1,8 @@
 ## CoralNet simulation code ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
-
+## ZR to do: understand rgamma() and rtruncnorm()
+## generalize to add additional columns
+## add site / transect metadata
 
 
 
