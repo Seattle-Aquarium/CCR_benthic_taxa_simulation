@@ -1,14 +1,57 @@
+## CoralNet simulation code ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+
+
+
+
+## start up ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 library(truncnorm)
+library(tidyverse)
+## END start up ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
-i1 <- rgamma(n = 100, shape = c(rep(4, times = 50), rep(2, times = 50)), scale = 2)
 
-i2 <- rtruncnorm(n = 100, a = -Inf, b = (50 - i1), mean = 10, sd = 1)
 
+
+
+## params ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+n <- 100
+times <- 50
+gamma_mu_1 <- 4
+gamma_mu_2 <- 2 
+scale <- 2
+
+a <- -Inf ## what is this param in rtruncnorm
+b <- (50 - i1) ## what is this param in rtruncnorm
+norm_mu <- 10
+norm_sd <- 1
+## END params ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+
+
+
+
+## simulate ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## simulate gamma with shape and scale
+i1 <- rgamma(n, shape = c(rep(mu_1, times), rep(mu_2, times)), scale)
+
+
+## simulate with a truncated normal distribution, with 50-i1 preventing values 
+## would sum greater than 50
+i2 <- rtruncnorm(n, a, b, norm_mu, norm_sd)
+
+
+## u1 rounds out the rest of 50
 u1 <- 50 - i1 - i2
 
+
+## bind the simulated columns together
 df.1 <- cbind(i1, i2, u1)
 
+
+## check row sums
 rowSums(df.1)
+## END simulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
 
 
 
