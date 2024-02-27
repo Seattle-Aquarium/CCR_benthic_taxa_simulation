@@ -88,23 +88,40 @@ remainder <- (col_sum - i1 - i2 - i3 - i4 - i5)
 
 
 ## bind the simulated columns together
-df.1 <- cbind(i1, i2, i3, i4, i5, remainder)
+df.1 <- cbind(i1, i2, i3, i4, i5)
 
 
 ## check row sums
 rowSums(df.1)
 
-## randomly split remainder into four more categories
 
-categories <- as.factor(c("r1", "r2", "r3", "r4"))
+## create categories in which to simulate
+categories <- as.factor(c("r1", "r2", "r3", "r4", "r5"))
 
+
+## create a list of lists with the columns to sample
 rows <- map(remainder, ~ sample(categories, ., replace = TRUE))
 
+
+## 
 df.2 <- lapply(rows, summary)
 
-test <- lapply(df.2, sum)
 
+##
+test <- lapply(df.2, sum)
 unlist(test) == remainder
+
+
+## 
+df.2 <- as.data.frame(do.call(rbind, df.2))
+
+
+## bind the x2 data frames together
+dat <- cbind(df.1, df.2)
+
+
+
+
 
 # add df.2 to df.1 in place of remainder
 
@@ -112,7 +129,7 @@ unlist(test) == remainder
 ## add meta data
 sites <- rep(c("Site_1", "Site_2"), each = 50, len=100)
 transects <- rep(c("T1", "T2", "T3", "T4"), each = 25, len=100)
-df.2 <- cbind(df.1, sites, transects)
+dat <- cbind(dat, sites, transects)
 
 
 ## plot data 
