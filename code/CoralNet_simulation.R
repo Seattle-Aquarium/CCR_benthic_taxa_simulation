@@ -94,13 +94,19 @@ df.1 <- cbind(i1, i2, i3, i4, i5, remainder)
 ## check row sums
 rowSums(df.1)
 
+## randomly split remainder into four more categories
 
-## split up u1 into remaining, unimportant columns
-## but how to do so in a way that adds noise? 
-#u1 <- r1/5
+categories <- as.factor(c("r1", "r2", "r3", "r4"))
 
+rows <- map(remainder, ~ sample(categories, ., replace = TRUE))
 
+df.2 <- lapply(rows, summary)
 
+test <- lapply(df.2, sum)
+
+unlist(test) == remainder
+
+# add df.2 to df.1 in place of remainder
 
 
 ## add meta data
