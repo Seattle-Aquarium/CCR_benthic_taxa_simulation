@@ -1,12 +1,3 @@
-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
-## Bind and process metadata for CoralNet simulation ~~~~~~~~~~~~~~~~~~~~~~~~ ##
-## Generate .csv files with transect and site row lengths to guide simulation ##
-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
-
-
-
-
-
 ## start up ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 rm(list = ls())
 
@@ -61,7 +52,19 @@ wrangle.csv <- function(file.name){
   data <- arrange(data, site, transect)
   data <- create.key(data)
   setwd(data_output)
-  write.csv(data, file.name)
+  write.csv(data, file.name, row.names = FALSE)
+  return(data)
+}
+
+
+## function that returns every nth row to simulate non-overlapping, extracted still images
+every.nth.row <- function(file.name, nth, output.file){
+  setwd(data_output)
+  data <- read.csv(file.name)
+  data <- data[seq(1, nrow(data), nth), ]
+
+  setwd(data_output)
+  write.csv(data, output.file, row.names = FALSE)
   return(data)
 }
 
@@ -71,8 +74,9 @@ nrows.transect <- function(data, file.name){
   nrows <- data %>%
     group_by(key) %>%
     summarise(no_rows = length(key))
+  
   setwd(data_output)
-  write.csv(nrows, file.name)
+  write.csv(nrows, file.name, row.names = FALSE)
   return(nrows)
 }
 
@@ -82,8 +86,9 @@ nrows.site <- function(data, file.name){
   nrows <- data %>%
     group_by(site) %>%
     summarise(no_rows = length(site))
+  
   setwd(data_output)
-  write.csv(nrows, file.name)
+  write.csv(nrows, file.name, row.names = FALSE)
   return(nrows)
 }
 ## END functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
@@ -96,12 +101,16 @@ nrows.site <- function(data, file.name){
 dat <- wrangle.csv("metadata.csv")
 
 
+## overwrite previous .csv file with trimmed file that matches our 8sec still extraction process
+trimmed_dat <- every.nth.row("metadata.csv", 8, "metadata.csv")
+
+
 ## create a .csv with transect specific row lengths to guide simulation 
-transect_rows <- nrows.transect(dat, "nrows_transect.csv")
+transect_rows <- nrows.transect(trimmed_dat, "nrows_transect.csv")
 
 
 ## create a .csv with site specific row lengths to guide simulation
-site_rows <- nrows.site(dat, "nrows_site.csv")
+site_rows <- nrows.site(trimmed_dat, "nrows_site.csv")
 ## END data processing and file creation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
 
