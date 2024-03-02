@@ -26,13 +26,17 @@ Possible important percent-cover variables include:
 1. red algae (red) 
 2. sugar kelp (sugar) 
 3. ulva green algae (ulva)
-3. soft substrate (soft) 
-4. pebble, rock substrate (pebble)
-5. hard substrate (hard) 
+4. soft substrate (soft) 
+5. pebble, rock substrate (pebble)
+6. hard substrate (hard) 
 
 Possible important abundances include: 
 1. bull kelp (bull) 
 2. kelp crabs (crab) 
+
+Possible number of unimportant CoralNet variables to round our col_sum (column sum) to 50
+1. just use one column? 
+2. alternatively, use the same number of columns as the important variables (6, currently). 
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
 
@@ -48,16 +52,6 @@ Possible simulation scenarios and anticipated hypotheses:
 4. [ ...red, ...sugar, ...ulva, ...soft, ...pebble, ...rock
    simulated ...
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
-
-
-
-
-
-
-
-
-
-
 
 
 
