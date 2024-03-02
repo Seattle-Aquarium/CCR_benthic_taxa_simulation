@@ -13,40 +13,17 @@
 ## start up ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 rm(list = ls())
 
+
 library(truncnorm)
 library(tidyverse)
+
+
+## hardcode relative file paths
+code <- "../code"
+data_input <- "../data_input"
+data_output <- "../data_output"
+figs <- "../figs"
 ## END start up ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
-
-
-
-
-
-## params ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
-n <- 100
-reps <- 50
-col_sum <- 50
-gamma_mu_1 <- 10
-gamma_mu_2 <- 2 
-scale <- 2
-
-a <- 0 ## lower bound
-#b2 <- (reps - i1) ## upper bound
-#b3 <- (reps - i1 - i2) 
-#b4 <- (reps - i1 - i2 - i3)
-#b5 <- (reps - i1 - i2 - i3 - i4)
-
-norm_mu_2 <- 10
-norm_sd_2 <- 1
-
-norm_mu_3 <- 5
-norm_sd_3 <- 1
-
-norm_mu_4 <- 5
-norm_sd_4 <- 1
-
-norm_mu_5 <- 5
-norm_sd_5 <- 1
-## END params ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
 
 
@@ -54,6 +31,9 @@ norm_sd_5 <- 1
 
 ## simulate ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 ## simulate gamma with shape and scale
+
+simulate.impt.vars <- function(n, reps, col_sum){
+
 i1 <- round(rgamma(n, shape = c(
   rep(gamma_mu_1, reps), 
   rep(gamma_mu_2, reps)), scale),0)
@@ -62,62 +42,148 @@ i1 <- round(rgamma(n, shape = c(
 ## use i1 to set upper bound
 b2 <- (col_sum - i1) 
 
-
 ## simulate with a truncated normal distribution, with 50-i1 preventing values 
 ## would sum greater than 50
-i2 <- round(rtruncnorm(n, a, b2, norm_mu_2, norm_sd_2),0)
+i2 <- round(rtruncnorm(n, a, b2, norm_mu_2, norm_sd_2), 0)
 b3 <- (col_sum - i1 - i2) 
 
-
 ## add a third important variable
-i3 <- round(rtruncnorm(n, a, b3, norm_mu_3, norm_sd_3),0)
+i3 <- round(rtruncnorm(n, a, b3, norm_mu_3, norm_sd_3), 0)
 b4 <- (col_sum - i1 - i2 - i3)
 
-
 ## add a fourth important variable
-i4 <- round(rtruncnorm(n, a, b4, norm_mu_4, norm_sd_4),0)
+i4 <- round(rtruncnorm(n, a, b4, norm_mu_4, norm_sd_4), 0)
 b5 <- (col_sum - i1 - i2 - i3 - i4)
 
-
 ## add a fifth important variable
-i5 <- round(rtruncnorm(n, a, b5, norm_mu_5, norm_sd_5),0)
+i5 <- round(rtruncnorm(n, a, b5, norm_mu_5, norm_sd_5), 0)
+b6 <- (col_sum - i1 - i2 - i3 - i4 - i5)
 
-
-## r1 rounds out the rest of col_sum
-remainder <- (col_sum - i1 - i2 - i3 - i4 - i5)
-
+## add a sixth important variable
+i6 <- round(rtruncnorm(n, a, b6, norm_mu_6, norm_sd_6), 0)
 
 ## bind the simulated columns together
-df.1 <- cbind(i1, i2, i3, i4, i5)
+df.1 <- cbind(i1, i2, i3, i4, i5, i6)
+
+## close
+return(df.1)
+}
+
+
+## function to simulate "unimportant" variables that round each row 
+## (each image) up to num.vars i.e. the number of data points
+simulate.unimpt.vars <- function(col_sum, num.vars){
+  
+  remainder <- (col_sum - df.1[,1] - df.1[,2] - df.1[,3] - df.1[,4] - df.1[,5] - df.1[,6])
+  categories <- as.factor(num.vars)
+  rows <- map(remainder, ~ sample(categories, ., replace = TRUE))
+  df.2 <- lapply(rows, summary)
+  df.2 <- as.data.frame(do.call(rbind, df.2))
+  
+  dat <- cbind(df.1, df.2)
+  return(dat)
+}
+
+
+
+
+
+## params ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## gamma distribution boundaries and parameters 
+a <- 0
+gamma_mu_1 <- 10
+gamma_mu_2 <- 2 
+scale <- 2
+
+
+## truncated normal distribution parameters 
+norm_mu_2 <- 10
+norm_sd_2 <- 1
+
+norm_mu_3 <- 1
+norm_sd_3 <- 1
+
+norm_mu_4 <- 20
+norm_sd_4 <- 1
+
+norm_mu_5 <- 1
+norm_sd_5 <- 1
+
+norm_mu_6 <- 5
+norm_sd_6 <- 1
+## END params ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+
+
+
+
+## invoke functrions to simulate data ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ## 
+## simulate important variables
+df.1 <- simulate.impt.vars(100, 50, 50)
+
+
+## simulate unimportant variables and bind together data
+dat <- simulate.unimpt.vars(50, c("r1"))
 
 
 ## check row sums
-rowSums(df.1)
+rowSums(dat)
+## END data simulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
 
-## create categories in which to simulate
-categories <- as.factor(c("r1", "r2", "r3", "r4", "r5"))
 
 
-## create a list of lists with the columns to sample
-rows <- map(remainder, ~ sample(categories, ., replace = TRUE))
+
+
+
+
+
+
+test <- rpois(100, 1)
+
+S1 <- 10#2795
+S2 <- 15#2352
+S3 <- 20#2815
+S4 <- 30#2691
+
+pois.n <- S1 + S2 + S3 + S4
+
+test <- rpois(pois.n, c(100, 5))
+
+test <- rpois(c(S1, S2, S3, S4), 10)
+
+test
 
 
 ## 
-df.2 <- lapply(rows, summary)
 
 
-##
-test <- lapply(df.2, sum)
-unlist(test) == remainder
+i1 <- round(rgamma(n, shape = c(
+  rep(gamma_mu_1, reps), 
+  rep(gamma_mu_2, reps)), scale),0)
 
 
-## 
-df.2 <- as.data.frame(do.call(rbind, df.2))
+
+n <- 150
+reps <- 50
+lam_1 <- 20
+lam_2 <- 2
+lam_3 <- 10
 
 
-## bind the x2 data frames together
-dat <- cbind(df.1, df.2)
+test <- rpois(n, lambda = c(rep(lam_1, reps),
+                            rep(lam_2, reps), 
+                            rep(lam_3, reps)))
+
+
+plot(test)
+
+
+
+
+
+
+
 
 
 
