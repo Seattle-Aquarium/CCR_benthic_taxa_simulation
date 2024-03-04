@@ -42,6 +42,7 @@ Possible number of unimportant CoralNet variables to round our col_sum (column s
 
 
 
+
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 Possible simulation scenarios and anticipated hypotheses: 
 1. Null hypothesis: no signal; simulate uniform mean across all columns
@@ -52,6 +53,19 @@ Possible simulation scenarios and anticipated hypotheses:
 4. [ ...red, ...sugar, ...ulva, ...soft, ...pebble, ...rock
    simulated ...
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+
+
+
+
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+Possible spatial structure to the simulated data: (all with relatively homogenous transects). 
+1. Uniform signal - all sites and all transects have the same uniform mean (1st instantiation) 
+2. Split signal - site 1---4 have signal 1, sites 5---8 have signal 2
+3. Real-life adjacent - model Magnolia, EBM, Centennial Park, etc. 
+4. ... other? 
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
 
 
 
