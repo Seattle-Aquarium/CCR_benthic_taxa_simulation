@@ -112,8 +112,8 @@ colnames(df.1)[1] <- "red_algae"
 colnames(df.1)[2] <- "sugar_kelp"
 colnames(df.1)[3] <- "green_algae"
 colnames(df.1)[4] <- "soft_sediment"
-colnames(df.1)[5] <- "rock"
-colnames(df.1)[6] <- "hard_substrate"
+colnames(df.1)[5] <- "small_rocks"
+colnames(df.1)[6] <- "boulder_bedrock"
 
 return(df.1)
 }
@@ -161,28 +161,32 @@ n <- sum(rows[2])
 ## lower bound
 a <- 0
 
+## Magnolia: 
+## Red = 3, Sugar = 25, Green = 1, Soft sediment = 20, Rock = 5, Bedrock = 1
+
+
 ## red algae 
-gamma_mu_S1 <- 1   
+gamma_mu_S1 <- 3   
 gamma_mu_S2 <- 5
 gamma_mu_S3 <- 10
 gamma_mu_S4 <- 15
-gamma_mu_S5 <- 2
-gamma_mu_S6 <- 3
-gamma_mu_S7 <- 2
-gamma_mu_S8 <- 5
+gamma_mu_S5 <- 1
+gamma_mu_S6 <- 5
+gamma_mu_S7 <- 10
+gamma_mu_S8 <- 1
 
 ## sugar kelp
-norm_mu_2_S1 <- 5   
-norm_mu_2_S2 <- 10
-norm_mu_2_S3 <- 15
-norm_mu_2_S4 <- 5
-norm_mu_2_S5 <- 2
+norm_mu_2_S1 <- 25  
+norm_mu_2_S2 <- 5
+norm_mu_2_S3 <- 10
+norm_mu_2_S4 <- 15
+norm_mu_2_S5 <- 1
 norm_mu_2_S6 <- 5
-norm_mu_2_S7 <- 4
-norm_mu_2_S8 <- 2
+norm_mu_2_S7 <- 10
+norm_mu_2_S8 <- 15
 
 ## green algae, ulva
-norm_mu_3_S1 <- 5   
+norm_mu_3_S1 <- 1   
 norm_mu_3_S2 <- 10
 norm_mu_3_S3 <- 15
 norm_mu_3_S4 <- 5
@@ -192,7 +196,7 @@ norm_mu_3_S7 <- 4
 norm_mu_3_S8 <- 2
 
 ## soft sediment
-norm_mu_4_S1 <- 5   
+norm_mu_4_S1 <- 20   
 norm_mu_4_S2 <- 10
 norm_mu_4_S3 <- 15
 norm_mu_4_S4 <- 5
@@ -212,7 +216,7 @@ norm_mu_5_S7 <- 4
 norm_mu_5_S8 <- 2
 
 ## bedrock, hard substrate
-norm_mu_6_S1 <- 5   
+norm_mu_6_S1 <- 1   
 norm_mu_6_S2 <- 10
 norm_mu_6_S3 <- 15
 norm_mu_6_S4 <- 5
@@ -222,12 +226,12 @@ norm_mu_6_S7 <- 4
 norm_mu_6_S8 <- 2
 
 ## variance parameters 
-scale <- 1
-i2_sd <- 1
-i3_sd <- 1
-i4_sd <- 1
-i5_sd <- 1
-i6_sd <- 1
+scale <- 2
+i2_sd <- 2
+i3_sd <- 2
+i4_sd <- 2
+i5_sd <- 2
+i6_sd <- 2
 ## END params ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
 
@@ -240,11 +244,11 @@ df.1 <- simulate.CoralNet(n, 50)
 
 
 ## simulate unimportant variables and bind together data
-dat <- simulate.remainder(50, c("r1"))
+dat <- simulate.remainder(50, c("remainder"))
 
 
 ## check row sums
-rowSums(dat)
+dat$row_sum <- rowSums(dat)
 ## END data simulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
 
@@ -283,13 +287,79 @@ plot(kelp_crabs)
 
 
 ## bind data frames and process ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
-abundances <- as.data.frame(cbind(bull_kelp, kelp_crabs))
+#abundances <- as.data.frame(cbind(bull_kelp, kelp_crabs))
 
-dat <- cbind(dat, abundances)
+#dat <- cbind(dat, abundances)
 
 setwd(data_output)
 metadata <- read.csv("metadata.csv")
 
-dat <- cbind(dat, abundances, metadata)
+dat <- cbind(dat, metadata)
+dat$SU <- seq(1:nrow(dat))
 ## END abundances ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
+
+
+
+
+## plot data ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+my.theme = theme(panel.grid.major = element_blank(),
+                 panel.grid.minor = element_blank(),
+                 panel.background = element_blank(), 
+                 axis.line = element_line(colour = "black"),
+                 axis.title.x = element_text(size=15),
+                 axis.text.x = element_text(size=15),
+                 axis.title.y = element_text(size=15),
+                 axis.text.y = element_text(size=15))
+
+
+legend.theme <- theme(#legend.position=c(1,1),
+                     #legend.justification=c(.98,.98), 
+                     legend.text=element_text(size=15), 
+                     legend.title = element_text(size=15),
+                     #legend.title.align = 0.5, 
+                     #legend.key.height = unit(.2, "cm"),
+                     legend.key=element_rect(fill = FALSE, color=FALSE), 
+                     legend.background=element_rect(fill=FALSE, color=FALSE))
+
+
+
+
+
+S1 <- filter(dat, site %in% c("1"))
+
+S1T1 <- filter(S1, key %in% c("1_1"))
+  
+S1T1_comm <- subset(S1T1, select=c("red_algae", "sugar_kelp", 
+                                   "green_algae", "soft_sediment", 
+                                   "small_rocks", "boulder_bedrock",
+                                   "remainder", "SU"))
+
+S1T1_comm <- melt(S1T1_comm, id.vars="SU")
+
+
+graphics.off()
+windows(12,7)
+
+pal <- c("#ab2221", "#be5e00", "#b3a100", "#4d6934", "#3386a2", "#803280", "#000000")
+my.cols <- scale_color_manual(values=pal)
+
+
+
+# Everything on the same plot
+p1 <- ggplot(S1T1_comm, aes(SU, value, col=variable)) + 
+  my.theme + geom_point(size=1.75) + my.cols + legend.theme +
+  xlab("Simulated images") + ylab("Percent-cover points")
+
+print(p1)
+
+
+
+graphics.off()
+windows(12,7)
+
+p1 <- ggplot(dat, aes(SU, sugar_kelp)) +
+  geom_point(alpha=0.75) + my.theme + 
+  xlab("Simulated images") + ylab("Sugar kelp percent-cover per image")
+
+print(p1)
