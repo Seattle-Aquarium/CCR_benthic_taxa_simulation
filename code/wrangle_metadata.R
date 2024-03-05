@@ -51,6 +51,11 @@ wrangle.csv <- function(file.name){
   
   data <- arrange(data, site, transect)
   data <- create.key(data)
+  
+  data <- subset(data, select=c("key", "site", "transect", 
+                                "depth", "altitude", "DVLlat", 
+                                "DVLlon", "EucDIS", "area"))
+  
   setwd(data_output)
   write.csv(data, file.name, row.names = FALSE)
   return(data)
