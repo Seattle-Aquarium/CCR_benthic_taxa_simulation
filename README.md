@@ -41,10 +41,50 @@ creating a new vector that designates the upper bounds that subsequent values ca
 Now, for the next percent-cover category simulated (e.g., sugar kelp), we switch to a truncated normal distribution, as the "truncated" allows us to place a hard limit on the distribution, thereby ensure we do not simulate values greater than 50 (i.e., greater than `col_sum - i1`). Specifically: 
 
 ```
-i2 <- round(rtruncnorm(total_n, a, b2, mean = c(rep(norm_mu_2_S1, rows[1,2]), 
-                                                rep(norm_mu_2_S2, rows[2,2]),
-                                                rep(norm_mu_2_S3, rows[3,2]),
-                                                rep(norm_mu_2_S4, rows[4,2]), sd = i2_sd), 0)
+i2 <- round(rtruncnorm(total_n, a, b2, 
+                       mean = c(rep(norm_mu_2_S1, rows[1,2]), 
+                                rep(norm_mu_2_S2, rows[2,2]),
+                                rep(norm_mu_2_S3, rows[3,2]),
+                                rep(norm_mu_2_S4, rows[4,2]),
+                                rep(norm_mu_2_S5, rows[5,2]), 
+                                rep(norm_mu_2_S6, rows[6,2]),
+                                rep(norm_mu_2_S7, rows[7,2]),
+                                rep(norm_mu_2_S8, rows[8,2])),
+                       sd = i2_sd), 0)
+
+b3 <- (col_sum - i1 - i2) 
 ```
-we've added two additional ROV sites worth of simulations
+provides separate parameter values for each site, allowing us to control the underlying pattern of data. Furthermore, `b2` sets the upper bound for the truncated normal distribution. We then go on to calculate `b3`, which will now provide the upper bound of the next simulated category. 
+
+We proceed in this two-step process: simulate a variable, then calculate the new upper bound. As shown above, the eight Urban Kelp ROV sites can each have a distinct mean for any given category sampled. For example, below we visualize all eight sites, i.e., all `total_n <- 2441` rows of simulated CoralNet images with mean values of `mean = c(25, 5, 10, 15, 1, 5, 10, 15)`, and `sd = 2`.
+
+
+![sugarkelp_allsites](https://github.com/zhrandell/Seattle_Aquarium_benthic_taxa_simulation/assets/49246458/5df021bc-0466-4a04-81aa-ff3c6529c858)
+
+This process can be repeated for as many percent-coverage categories as desired, and the code below generates six simulated percent-cover categories. 
+
+https://github.com/zhrandell/Seattle_Aquarium_benthic_taxa_simulation/blob/35b7841ca994acee7cc95f534712f76c481084ac/code/simulate_taxa.R#L28-L119
+
+Finally, we need to ensure that each row sums to 50, so we run the following to calculate a 7th CoralNet variable called `remainder`, which rounds the row sum up to 50. In the following we only caluclate a single additional column, though we can feed `num.vars` a vector and randomly allocate values across new columns until the row sum = 50. 
+
+```
+simulate.remainder <- function(col_sum, num.vars){
+  
+  remainder <- (col_sum - df.1[,1] - df.1[,2] - df.1[,3] - df.1[,4] - df.1[,5] - df.1[,6])
+  categories <- as.factor(num.vars)
+  rows <- map(remainder, ~ sample(categories, ., replace = TRUE))
+  df.2 <- lapply(rows, summary)
+  df.2 <- as.data.frame(do.call(rbind, df.2))
+  
+  dat <- cbind(df.1, df.2)
+  return(dat)
+}
+
+```
+
+To provide an example of the data, we can examine a single transect -- `S1_T1` -- Site 1, Transect 1, from our Urban Kelp surveys. As we extract a still image from every 8 seconds of video, our telemetry `S1_T1` contains 112 rows, akin to 112 simulated images destined for CoralNet analysis. 
+
+![simulated_magnolia](https://github.com/zhrandell/Seattle_Aquarium_benthic_taxa_simulation/assets/49246458/dfaf2ace-762f-43ec-8e26-51ec209e7181)
+
+
 
