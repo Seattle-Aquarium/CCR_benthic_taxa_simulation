@@ -8,6 +8,12 @@ Imagery from the forward-facing camera is used to classify discrete and individu
 
 Finally, we simulate these data in a manner that approximates our real-world ROV surveys from the Urban Kelp Research Project with the Port of Seattle. That is to say, our simulated benthic community data have the exact structure (in terms of the number of rows representing sites and transects) as our summer 2023 Urban Kelp ROV surveys. 
 
+In terms of content, we include the following: 
+* [code](https://github.com/zhrandell/Seattle_Aquarium_benthic_taxa_simulation/tree/main/code) contains _R_ scripts to combine and clean our real-world ROV telemetry files in preparation to append it to our simulated data, as well as code necessary to simulate percent-coverage and abundance data.
+* [data_input](https://github.com/zhrandell/Seattle_Aquarium_benthic_taxa_simulation/tree/main/data_input) contains our Urban Kelp ROV telemetry files from summer 2023.
+* [data_output](https://github.com/zhrandell/Seattle_Aquarium_benthic_taxa_simulation/tree/main/data_output) contains all derived files from our analyses, including the combined metadata.csv file we append to our simulated data.    
+
+
 Below we lay out a brief overview of our code and how to implement it. 
 
 
