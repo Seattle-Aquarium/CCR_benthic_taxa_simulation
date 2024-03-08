@@ -102,26 +102,6 @@ nrows.site <- function(data, file.name){
 
 
 
-## invoke functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
-dat <- wrangle.csv("metadata.csv")
-
-
-## overwrite previous .csv file with trimmed file that matches our 8sec still extraction process
-trimmed_dat <- every.nth.row("metadata.csv", 8, "metadata.csv")
-
-
-## create a .csv with transect specific row lengths to guide simulation 
-transect_rows <- nrows.transect(trimmed_dat, "nrows_transect.csv")
-
-
-## create a .csv with site specific row lengths to guide simulation
-site_rows <- nrows.site(trimmed_dat, "nrows_site.csv")
-## END data processing and file creation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
-
-
-
-
-
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 ## END script ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
