@@ -59,7 +59,7 @@ site_rows <- nrows.site(trimmed_dat, "nrows_site.csv")
 
 
 
-## invoke functions to simulate data ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## set parameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 ## pull in csv as to provide proper row lengths for simulations
 setwd(data_output)
 rows <- read.csv("nrows_site.csv")
@@ -211,19 +211,41 @@ write.csv(dat, "example_output.csv", row.names = FALSE)
 
 
 
-## invoke functions to visualize simulated data ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## invoke functions to prep data for visualization ~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 setwd(code)
 source("graphing_functions.R")
 
+
+## read in data file
 setwd(data_output)
 dat <- read.csv("example_output.csv")
 
 
+## filter to site level and melt for plotting
+sites <- filter.site(dat, c("1"), c("red_algae", "sugar_kelp", "green_algae", "soft_sediment", 
+                                    "small_rocks", "boulder_bedrock", "remainder", "SU"))
+
+
+## filter to transect level and melt for plotting
+transects <- filter.transect(dat, c("1"), c("1_1"), c("red_algae", "sugar_kelp", "green_algae", "soft_sediment", 
+                                                      "small_rocks", "boulder_bedrock", "remainder", "SU"))
+## END data prep for plotting ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+
+
+
+
+## plot data ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## set custom graphing window
+my.window(10, 8)
+
+
+## plot one category across all sites
 p1 <- plot.all.sites(dat, sugar_kelp, 0.75, "Simulated images", "Sugar kelp percent-cover per image")
 
 
+## plot all categories at a single transect
 p1 <- plot.transect(1.75, "Simulated images", "Percent-cover points")
-
 ## END data visualization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
 
