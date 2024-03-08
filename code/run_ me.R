@@ -241,7 +241,7 @@ my.window(10, 8)
 
 
 ## plot one category across all sites
-p1 <- plot.all.sites(dat, sugar_kelp, 0.75, "Simulated images", "Sugar kelp percent-cover per image")
+p1 <- plot.all.sites(dat, 0.75, "Simulated images", "Sugar kelp percent-cover per image")
 
 
 ## plot all categories at a single transect
