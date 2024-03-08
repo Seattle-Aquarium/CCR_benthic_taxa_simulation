@@ -33,9 +33,6 @@ filter.site <- function(df, select.site, taxa.list){
   return(df)
 }
 
-sites <- filter.site(dat, c("1"), c("red_algae", "sugar_kelp", "green_algae", "soft_sediment", 
-                                    "small_rocks", "boulder_bedrock", "remainder", "SU"))
-
 
 ## function to filter down to the transect level
 filter.transect <- function(df, select.site, select.transect, taxa.list){
@@ -47,9 +44,6 @@ filter.transect <- function(df, select.site, select.transect, taxa.list){
   
   return(df)
 }
-
-transects <- filter.transect(dat, c("1"), c("1_1"), c("red_algae", "sugar_kelp", "green_algae", "soft_sediment", 
-                                                      "small_rocks", "boulder_bedrock", "remainder", "SU"))
 ## END data prep ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
 
@@ -96,30 +90,18 @@ my.window <- function(width, height){
 
 ## create plotting functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 ## function to plot 1 category across all sites 
-plot.all.sites <- function(data, cat, alpha, x.lab, y.lab){
-  p1 <- ggplot(data, aes(SU, cat)) +
+plot.all.sites <- function(data, alpha, x.lab, y.lab){
+  
+  p1 <- ggplot(data, aes(SU, sugar_kelp)) +
     geom_point(alpha=alpha) + my.theme + xlab(x.lab) + ylab(y.lab)
+  
   print(p1)
   return(p1)
+  
 }
 
-p1 <- plot.all.sites(dat, sugar_kelp, 0.75, "Simulated images", "Sugar kelp percent-cover per image")
 
-
-
-
-# Everything on the same plot
-p1 <- ggplot(transects, aes(SU, value, col=variable)) + 
-  my.theme + geom_point(size=1.75) + my.cols + legend.theme +
-  xlab("Simulated images") + ylab("Percent-cover points")
-
-print(p1)
-
-
-
-
-
-
+## function to plot all categories at a single transect
 plot.transect <- function(pt.size, x.lab, y.lab){
   p1 <- ggplot(transects, aes(SU, value, col=variable)) + 
     my.theme + geom_point(size = pt.size) + my.cols + legend.theme +
@@ -128,21 +110,16 @@ plot.transect <- function(pt.size, x.lab, y.lab){
   print(p1)
   return(p1)
   
-  setwd(figs)
-  save.pdf 
-  save.png
+  #setwd(figs)
+  #save.pdf 
+  #save.png
 }
-
-print(p1)
-
-
-p1 <- plot.transect(1.75, "Simulated images", "Percent-cover points")
+## END graphing functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
 
 
 
 
-
-
-
-
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## END SCRIPT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
