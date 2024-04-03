@@ -33,15 +33,15 @@ rows <- read.csv("nrows_site.csv")
 
 simulate.CoralNet <- function(total_n, row_sum){
 
-i1 <- round(rgamma(total_n, shape = c(rep(shape_S1, rows[1,2]), 
-                                      rep(shape_S2, rows[2,2]),
-                                      rep(shape_S3, rows[3,2]),
-                                      rep(shape_S4, rows[4,2]),
-                                      rep(shape_S5, rows[5,2]),
-                                      rep(shape_S6, rows[6,2]),
-                                      rep(shape_S7, rows[7,2]),
-                                      rep(shape_S8, rows[8,2])), 
-                     scale), 0)
+i1 <- round(rnorm(total_n, mean = c(rep(mean_1_S1, rows[1,2]), 
+                                    rep(mean_1_S2, rows[2,2]),
+                                    rep(mean_1_S3, rows[3,2]),
+                                    rep(mean_1_S4, rows[4,2]),
+                                    rep(mean_1_S5, rows[5,2]),
+                                    rep(mean_1_S6, rows[6,2]),
+                                    rep(mean_1_S7, rows[7,2]),
+                                    rep(mean_1_S8, rows[8,2])), 
+                     sd = i1_sd), 0)
   
 b2 <- (row_sum - i1) 
 
@@ -142,23 +142,47 @@ simulate.remainder <- function(row_sum, num.vars){
 ## function to simulate abundances across eight sites
 simulate.abundances <- function(n){
   
-bull_kelp <- rpois(n, lambda = c(rep(lam_1_S1, rows[1,2]),
-                                 rep(lam_1_S2, rows[2,2]), 
-                                 rep(lam_1_S3, rows[3,2]), 
-                                 rep(lam_1_S4, rows[4,2]),
-                                 rep(lam_1_S5, rows[5,2]),
-                                 rep(lam_1_S6, rows[6,2]),
-                                 rep(lam_1_S7, rows[7,2]),
-                                 rep(lam_1_S8, rows[8,2])))
+  
+bull_kelp <- round(rnorm(n, mean = c(rep(mean_1_S1, rows[1,2]), 
+                                     rep(mean_1_S2, rows[2,2]),
+                                     rep(mean_1_S3, rows[3,2]),
+                                     rep(mean_1_S4, rows[4,2]),
+                                     rep(mean_1_S5, rows[5,2]),
+                                     rep(mean_1_S6, rows[6,2]),
+                                     rep(mean_1_S7, rows[7,2]),
+                                     rep(mean_1_S8, rows[8,2])), 
+                    sd = i1_sd), 0)
 
-kelp_crabs <- rpois(n, lambda = c(rep(lam_2_S1, rows[1,2]),
-                                  rep(lam_2_S2, rows[2,2]), 
-                                  rep(lam_2_S3, rows[3,2]), 
-                                  rep(lam_2_S4, rows[4,2]),
-                                  rep(lam_2_S5, rows[5,2]),
-                                  rep(lam_2_S6, rows[6,2]),
-                                  rep(lam_2_S7, rows[7,2]),
-                                  rep(lam_2_S8, rows[8,2])))
+
+kelp_crabs <- round(rnorm(n, mean = c(rep(mean_1_S1, rows[1,2]), 
+                                      rep(mean_1_S2, rows[2,2]),
+                                      rep(mean_1_S3, rows[3,2]),
+                                      rep(mean_1_S4, rows[4,2]),
+                                      rep(mean_1_S5, rows[5,2]),
+                                      rep(mean_1_S6, rows[6,2]),
+                                      rep(mean_1_S7, rows[7,2]),
+                                      rep(mean_1_S8, rows[8,2])), 
+                         sd = i1_sd), 0)
+
+
+  
+#bull_kelp <- rpois(n, lambda = c(rep(lam_1_S1, rows[1,2]),
+#                                 rep(lam_1_S2, rows[2,2]), 
+#                                 rep(lam_1_S3, rows[3,2]), 
+#                                 rep(lam_1_S4, rows[4,2]),
+#                                 rep(lam_1_S5, rows[5,2]),
+#                                 rep(lam_1_S6, rows[6,2]),
+#                                 rep(lam_1_S7, rows[7,2]),
+#                                 rep(lam_1_S8, rows[8,2])))
+
+#kelp_crabs <- rpois(n, lambda = c(rep(lam_2_S1, rows[1,2]),
+#                                  rep(lam_2_S2, rows[2,2]), 
+#                                  rep(lam_2_S3, rows[3,2]), 
+#                                  rep(lam_2_S4, rows[4,2]),
+#                                  rep(lam_2_S5, rows[5,2]),
+#                                  rep(lam_2_S6, rows[6,2]),
+#                                  rep(lam_2_S7, rows[7,2]),
+#                                  rep(lam_2_S8, rows[8,2])))
 
 df.2 <- cbind(bull_kelp, kelp_crabs)
 df.2 <- as.data.frame(df.2)
