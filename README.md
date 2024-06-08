@@ -1,4 +1,4 @@
-# benthic_taxa_simulation
+# Seattle_Aquarium_CCR_benthic_taxa_simulation
 ## Introduction
 This repo provides code to simulate data derived from the Seattle Aquarium's remotely operated vehicle (ROV) kelp forest survey program (see [here](https://github.com/zhrandell/Seattle_Aquarium_ROV_development)). Specifically, we simulate data derived from the downward- and forward-facing cameras mounted on the ROV. Our purpose is to provide simulated data with varying underlying patterns to a bull kelp habitat suitability model (linked [here](https://experience.arcgis.com/experience/b11daaa83ff045f1a9d88b2b926e1f75/page/About/)), enabling model evaluation and expansion. Once both simulated and real ROV data have been incorporated into this model, our intent is to generate finer-spatial scale predictors of habitat suitability to further guide bull kelp conservation and restoration.  
 
