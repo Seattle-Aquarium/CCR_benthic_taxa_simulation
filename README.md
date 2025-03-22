@@ -2,6 +2,26 @@
 ## Introduction
 This repo provides code to simulate data derived from the Seattle Aquarium's remotely operated vehicle (ROV) kelp forest survey program (see [here](https://github.com/zhrandell/Seattle_Aquarium_ROV_development)). Specifically, we simulate data derived from the downward- and forward-facing cameras mounted on the ROV. Our purpose is to provide simulated data with varying underlying patterns to a bull kelp habitat suitability model (linked [here](https://experience.arcgis.com/experience/b11daaa83ff045f1a9d88b2b926e1f75/page/About/)), enabling model evaluation and expansion. Once both simulated and real ROV data have been incorporated into this model, our intent is to generate finer-spatial scale predictors of habitat suitability to further guide bull kelp conservation and restoration.  
 
+## other CCR GitHub repositories
+
+```mermaid
+
+graph TD
+
+A["<a href='https://github.com/Seattle-Aquarium/Coastal_Climate_Resilience' target='_blank' style='font-size: 16px; font-weight: bold;'>Coastal_Climate_Resilience</a><br><font color='darkgray' style='text-decoration: none;'> the main landing pad for the CCR research program</font>"]
+
+A --> B["<a href='https://github.com/Seattle-Aquarium/CCR_analytical_resources' target='_blank' style='font-size: 16px; font-weight: bold;'>CCR_analytical_resources</a><br><font color='darkgray' style='text-decoration: none;'>contains code, analytical tools, and data</font>"]
+
+A --> C["<a href='https://github.com/Seattle-Aquarium/CCR_benthic_analyses' target='_blank' style='font-size: 16px; font-weight: bold;'>CCR_benthic_analyses</a><br><font color='darkgray' style='text-decoration: none;'>code to analyze ROV survey data</font>"]
+
+A --> D["<a href='https://github.com/Seattle-Aquarium/CCR_development' target='_blank' style='font-size: 16px; font-weight: bold;'>CCR_development</a><br><font color='darkgray' style='text-decoration: none;'>repo for active software projects and Issues</font>"]
+
+A --> E["<a href='https://github.com/Seattle-Aquarium/CCR_benthic_taxa_simulation' target='_blank' style='font-size: 16px; font-weight: bold;'>CCR_benthic_taxa_simulation</a><br><font color='darkgray' style='text-decoration: none;'> (this page) code to simulate ROV survey data</font>"]
+
+style E stroke:#00B2EE,stroke-width:4px
+```
+
+
 The downward-facing camera is used to characterize percent-coverage using CoralNet, an open-source AI annotation program, of aggregated taxa such as fleshy red algae, brown algae, and substrate type (see here for the complete list of categories we record). Imagery are analyzed in CoralNet to generate metrics of percent-coverage. This repo contains code to simulate data derived from CoralNet, where our rows sum to `row_sum = 50`, mirroring the 50 percent-coverage data points classified in every image. With this in mind, every row in our simulated data represent a simulated downward-facing image.  
 
 Imagery from the forward- and downward-facing cameras are used to classify discrete and individually specific "objects" (individuals) encountered by the ROV such as bull kelp stipes, kelp crabs, and fishes. Here, our code provides the means to simulate and append these data to the simulated percent-coverage data. Unlike percent-coverage requiring discretion over `row_sum = 50`, abundance counts may take upon any integer equal to or greater than 0.  
